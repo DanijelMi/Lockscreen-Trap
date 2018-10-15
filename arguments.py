@@ -6,5 +6,6 @@ parser = argparse.ArgumentParser(
     epilog="Example: %(prog)s PARAMS_LEL")
 parser.add_argument('-p', '--path', default='./', help='File path to captured images')
 parser.add_argument('-t', '--arm-time', type=int, default=5, help='Seconds before activating')
-parser.add_argument('-n','--no-video', nargs='?', help='Disables the image capturing')
+parser.add_argument('-n','--no-video', dest='accumulate', action='store_const',
+                    const=sum, default=max, help='Disables the image capturing')
 args = parser.parse_args()
