@@ -1,7 +1,7 @@
 import sys, subprocess
-from threading import Thread    #
-import pynput.mouse as ms       #
-import pynput.keyboard as kb    #
+from threading import Thread
+import pynput.mouse as ms
+import pynput.keyboard as kb
 from time import gmtime, strftime, sleep
 import argparse
 
@@ -19,14 +19,21 @@ def parseArgs():
                         const=True, default=False, help='Disables image capturing')
     parser.add_argument('-p', '--path', default='./', help='File path to captured images')
     parser.add_argument('-t', '--arm-time', type=int, default=3, help='Seconds before activating')
-    #args = parser.parse_args()
+    parser.add_argument('-c', '--command', nargs='+', help='Executes custom command at the end')
     args = vars(parser.parse_args())
-    return args['verbose'], args['no_lock'], args['no_video'], args['path'], args['arm_time']
+    return args['verbose'], args['no_lock'], args['no_video'], args['path'], args['arm_time'], args['command']
 
 
 args=parseArgs()
 print(args)
-sleep(args[4])       # Seconds of waiting before starting the script
+
+# Takes all arguments for -c command and concatinate them into a single string
+customCommand = ''
+if args[5]:
+    for i in args[5]:
+        customCommand += str(i) + ' '
+
+sleep(args[4])       # Seconds of waiting before starting/arming the script
 
 def bash_command(cmd):                              # 
     subprocess.Popen(['/bin/bash', '-c', cmd])      #
@@ -64,4 +71,5 @@ captureCommand = "mplayer -vo jpeg:outdir={}/{} -frames 1 tv://".format(args[3],
 print(captureCommand)
 bash_command(captureCommand) if not args[2] else False          # Captures image
 bash_command("loginctl lock-session") if not args[1] else False # Locks session
+bash_command(customCommand) if customCommand else False         # Executes custom command
 sys.exit()                                  # Closes main process and its daemons too.
