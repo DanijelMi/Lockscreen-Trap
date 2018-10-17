@@ -19,7 +19,7 @@ def parseArgs():
                         const=True, default=False, help='Disables image capturing')
     parser.add_argument('-p', '--path', default='./', help='File path to captured images')
     parser.add_argument('-t', '--arm-time', type=int, default=3, help='Seconds before activating')
-    parser.add_argument('-c', '--command', nargs='+', help='Executes custom command at the end')
+    parser.add_argument('-c', '--command', nargs=argparse.REMAINDER, help='Executes custom command at the end')
     args = vars(parser.parse_args())
     return args['verbose'], args['no_lock'], args['no_video'], args['path'], args['arm_time'], args['command']
 
