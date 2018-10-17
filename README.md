@@ -18,3 +18,4 @@ Arm immideately and do not lock, saves the directory it is run in by default
   python3 Lock_Trap.py -t 0 -l
   
 Skip capturing the frame but start playing noise
+  python3 Lock_Trap.py -n -c aplay -d 10 fuckedup.wav 
